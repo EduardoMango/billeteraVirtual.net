@@ -1,0 +1,6 @@
+@Nivelatorio_BilleteraVirtual_HostAddress = http://localhost:5174
+
+GET {{Nivelatorio_BilleteraVirtual_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
