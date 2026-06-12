@@ -7,12 +7,13 @@ CREATE TABLE wallet.cuentas (
 
 CREATE TABLE wallet.categorias (
                             Id SERIAL PRIMARY KEY,
-                            Nombre VARCHAR(50) NOT NULL,
-                            Tipo VARCHAR(10) NOT NULL CHECK (Tipo IN ('INGRESO', 'EGRESO'))
+                            Name VARCHAR(50) NOT NULL,
+                            Type VARCHAR(10) NOT NULL CHECK (Type IN ('INGRESO', 'EGRESO'))
 );
 
 CREATE TABLE wallet.transacciones (
                                Id SERIAL PRIMARY KEY,
+                               publicid UUID NOT NULL DEFAULT gen_random_uuid(),
                                CuentaId INT NOT NULL,
                                CategoriaId INT NOT NULL,
                                Monto DECIMAL(18,2) NOT NULL,
@@ -24,3 +25,4 @@ CREATE TABLE wallet.transacciones (
                                CONSTRAINT FK_Transacciones_Categorias FOREIGN KEY (CategoriaId) REFERENCES wallet.categorias(Id)
 );
 
+CREATE UNIQUE INDEX idx_transacciones_publicid ON wallet.transacciones(publicid);

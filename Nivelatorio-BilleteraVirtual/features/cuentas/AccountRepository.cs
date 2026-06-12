@@ -9,11 +9,15 @@ public class AccountRepository(IDbConnection connection) : IAccountRepository
 {
     public async Task<AccountEntity?> save(AccountEntity c)
     {
-        var sql = """
-                  INSERT INTO wallet.cuentas (NombreTitular, NumeroCuenta, Saldo)
-                  VALUES (@NombreTitular, @NumeroCuenta, @Saldo)
-                  RETURNING Id, NombreTitular, NumeroCuenta, Saldo;
-                  """;
+        const string sql = """
+                           INSERT INTO wallet.cuentas (nombretitular, numerocuenta, saldo)
+                           VALUES (@HolderName, @AccountNumber, @Balance)
+                           RETURNING 
+                               id AS Id, 
+                               nombretitular AS HolderName, 
+                               numerocuenta AS AccountNumber, 
+                               saldo AS Balance;
+                           """;
 
         return await connection.QueryFirstOrDefaultAsync<AccountEntity>(sql, c);
     }
@@ -30,6 +34,19 @@ public class AccountRepository(IDbConnection connection) : IAccountRepository
         const string sql = "UPDATE wallet.cuentas SET Saldo = @NewBalance WHERE Id = @Id;";
         int affectedRows = await connection.ExecuteAsync(sql, new { Id = id, NewBalance = newBalance }, transaction);
         return affectedRows > 0;
+    }
+    public async Task<AccountEntity?> GetByAccountNumberAsync(string accountNumber)
+    {
+        const string sql = """
+                           SELECT 
+                               id AS Id,
+                               numerocuenta AS AccountNumber, 
+                               saldo AS Balance, 
+                               nombretitular AS HolderName
+                           FROM wallet.cuentas
+                           WHERE numerocuenta = @AccountNumber;
+                           """;
+        return await connection.QueryFirstOrDefaultAsync<AccountEntity>(sql, new { AccountNumber = accountNumber });
     }
     
     

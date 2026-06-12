@@ -9,4 +9,5 @@ public interface IAccountRepository
     public Task<AccountEntity?> GetByIdAsync(int id, IDbTransaction? transaction = null);
 
     public Task<bool> UpdateBalanceAsync(int id, decimal newBalance, IDbTransaction? transaction = null);
+    public Task<AccountEntity?> GetByAccountNumberAsync(string accountNumber);
 }

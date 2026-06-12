@@ -13,7 +13,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
     {
         logger.LogError(exception, "Ocurrió una excepción no controlada: {Message}", exception.Message);
 
-        // Mapeamos la excepción al código de estado correspondiente (Como los @ExceptionHandler)
+        // Mapeamos la excepción al código de estado correspondiente
         var (statusCode, title, detail) = exception switch
         {
             KeyNotFoundException => 

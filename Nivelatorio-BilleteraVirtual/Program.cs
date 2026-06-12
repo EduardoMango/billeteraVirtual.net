@@ -8,13 +8,14 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Registras el servicio de ProblemDetails y tu Handler personalizado
-builder.Services.AddProblemDetails();
+// 1. Problem details and exception handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddScoped<IDbConnection>(sp => new NpgsqlConnection(connectionString));
+
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -42,6 +43,9 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -50,7 +54,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapCuentaEndpoints();
+app.MapAccountEndpoints();
 app.MapCategoriaEndpoints();
 app.MapTransactionEndpoints();
 
