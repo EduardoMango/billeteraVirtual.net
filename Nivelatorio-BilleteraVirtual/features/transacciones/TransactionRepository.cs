@@ -10,7 +10,8 @@ public class TransactionRepository(IDbConnection connection) : ITransactionRepos
     public async Task<TransactionEntity?> save(string accountNumber, 
         string categoryName, 
         decimal amount, 
-        string type)
+        string type,
+        IDbTransaction? transaction = null)
     {
         const string sql = @"
     SELECT 
@@ -34,7 +35,7 @@ public class TransactionRepository(IDbConnection connection) : ITransactionRepos
             CategoryName = categoryName,
             Amount = amount,
             Type = type.ToString()
-        });
+        }, transaction);
     }
     
     

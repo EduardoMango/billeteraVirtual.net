@@ -8,7 +8,8 @@ public interface ITransactionRepository
     Task<TransactionEntity?> save(string accountNumber, 
         string categoryName, 
         decimal amount, 
-        string type);
+        string type,
+        IDbTransaction? transaction = null);
 
     public Task<bool> DeleteAsync(Guid publicId, IDbTransaction? transaction = null);
 

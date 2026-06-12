@@ -16,6 +16,19 @@ public static class AccountEndpoints
             return history is not null ? Results.Ok(history) : Results.NotFound();
         });
 
+        group.MapPost("/transfer", async (TransferDto dto, AccountService service) =>
+        {
+            try
+            {
+                await service.TransferAsync(dto);
+                return Results.Ok(new { message = "Transferencia realizada con éxito" });
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(new { error = ex.Message });
+            }
+        });
+
         return group;
     }
     
